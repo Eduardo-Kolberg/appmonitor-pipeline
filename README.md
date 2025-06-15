@@ -1,1 +1,5 @@
 # appmonitor-pipeline
+
+# Papel do Git na entrega contínua e a importância de branches e tags
+O Git é utilizado para controle e versionamento de código, a importância dele para a entrega contínua é grande uma vez que permite que, atraves de branchs, diversos desenvolvedores trabalhem no mesmo projeto em requisitos diferentes com segurança sem modificar o código "principal" que está contido na branch main, juntando os códigos atraves de pull requests quando a feature nova estiver implementada ou o bug corrigido. Ademais o sistema de commits e branchs facilitam o rollback caso ele seja necessário. 
+As tags também entram na parte de facilitadores de identificação de releases importantes, normalmente os que são promovidos para produção ou versões "major" ou seja que mudem algo significativo no projeto. Elas marcam pontos importantes e com isso tornam mais facil o rollback para esse ponto caso seja necessário, são úteis para ter um histórico dos releases da aplicação, ademais pode se usar o release e criação de tags para dar trigger no deploy para produção se utilizando do CI/CD.
