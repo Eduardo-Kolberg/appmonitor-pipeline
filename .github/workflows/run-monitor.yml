@@ -1,0 +1,33 @@
+name: Run Monitor
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  use-env:
+    name: Environment Context
+    runs-on: ubuntu-latest
+    env:
+      APP_ENV: ${{ vars.APP_ENV }}
+    steps:
+      - name: environment variable
+        run: |
+          echo "Running in environment: $APP_ENV"
+
+  use-vars:
+    name: Vars Context
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vars context
+        run: |
+          echo "Support contact: ${{ vars.SUPPORT_EMAIL }}"
+
+  use-secrets:
+    name: Secret Context
+    runs-on: ubuntu-latest
+    steps:
+      - name: Secret key
+        run: echo "API key is set"
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
