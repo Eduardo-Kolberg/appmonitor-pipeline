@@ -1,0 +1,58 @@
+name: Pipeline Diagnostic
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  diagnostics:
+    name: Environment Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check required variables
+        run: |
+          echo " Verificando variáveis de ambiente"
+          MISSING=0
+
+          if [ -z "${APP_ENV}" ]; then
+            echo "::error::APP_ENV não está definida."
+            MISSING=1
+          else
+            echo "::notice::APP_ENV está presente: $APP_ENV"
+          fi
+
+          if [ -z "${API_KEY}" ]; then
+            echo "::error::API_KEY não está definida."
+            MISSING=1
+          else
+            echo "::notice::API_KEY está presente"
+          fi
+
+          if [ "$MISSING" -eq 1 ]; then
+            echo "Erros encontrados na configuração do ambiente."
+            exit 1
+          else
+            echo "Todas as variáveis obrigatórias estão definidas."
+          fi
+        env:
+          APP_ENV: ${{ vars.APP_ENV }}
+          API_KEY: ${{ secrets.API_KEY }}
+
+      - name: Job Summary
+        if: always()
+        run: |
+          echo "Summary" >> $GITHUB_STEP_SUMMARY
+          if [ -z "${{ vars.APP_ENV }}" ]; then
+            echo "- APP_ENV ausente." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "-APP_ENV: \`${{ vars.APP_ENV }}\`" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -z "${{ secrets.API_KEY }}" ]; then
+            echo "-API_KEY ausente." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "-API_KEY: disponível." >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "Sugestões" >> $GITHUB_STEP_SUMMARY
+          echo "- Verifique se as variáveis foram definidas corretamente no repositório." >> $GITHUB_STEP_SUMMARY
